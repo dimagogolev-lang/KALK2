@@ -1,0 +1,52 @@
+name: Build macOS and publish Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  build-macos:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          # если есть requirements.txt — поставим его
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          # на всякий случай, чтобы сборка точно была
+          pip install pyinstaller matplotlib
+
+      - name: Build .app with PyInstaller
+        run: |
+          pyinstaller --noconfirm --clean --windowed --name "Kalkulyator_ZHKH" main.py
+
+      - name: Zip .app
+        run: |
+          cd dist
+          zip -r "Kalkulyator_ZHKH-mac.zip" "Kalkulyator_ZHKH.app"
+
+      - name: Upload artifact (optional)
+        uses: actions/upload-artifact@v4
+        with:
+          name: Kalkulyator_ZHKH-mac
+          path: dist/Kalkulyator_ZHKH-mac.zip
+
+      - name: Publish to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/Kalkulyator_ZHKH-mac.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
