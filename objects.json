@@ -1,0 +1,19 @@
+{
+  "current_id": "obj_895e8317",
+  "objects": [
+    {
+      "id": "obj_895e8317",
+      "name": "Квартира 2",
+      "tariffs": {
+        "tariff_sewage": 46.73,
+        "tariff_xvs": 43.24,
+        "tariff_gvs": 43.24,
+        "tariff_heating_per_gcal": 2891.74,
+        "norm_gcal_per_m3": 0.06,
+        "tariff_el_day": 6.79,
+        "tariff_el_night": 2.81
+      },
+      "history": []
+    }
+  ]
+}
